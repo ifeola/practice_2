@@ -1,4 +1,4 @@
-import express from "express";
+import express, { request } from "express";
 import products from "./data/products.js";
 
 const app = express();
@@ -9,6 +9,30 @@ app.use(express.json());
 // This is an example of a get request
 app.get("/api/products", (request, response) => {
 	response.json(products);
+});
+
+// Getting a product by id
+app.get("/api/products/:id", (request, response) => {
+	const {
+		params: { id },
+	} = request;
+
+	console.log(id);
+
+	const parsedId = parseInt(id);
+
+	if (isNaN(parsedId))
+		return response.send(
+			"The ID your provided is invalid, please provide a valid ID."
+		);
+
+	const newProduct = products.products.find(
+		(product) => product.id === parsedId
+	);
+
+	if (!newProduct) return response.send("Product not found.");
+
+	return response.json(newProduct);
 });
 
 // This is an example of a post request
