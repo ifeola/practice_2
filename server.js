@@ -1,38 +1,25 @@
 import express, { request } from "express";
-import products from "./data/products.js";
+import router from "./routes/router.js";
 
 const app = express();
-const PORT = 8383;
+const PORT = process.env.PORT || 8383;
 
 app.use(express.json());
 
 // This is an example of a get request
-app.get("/api/products", (request, response) => {
-	response.json(products);
-});
+// app.use("/api", router);
 
 // Getting a product by id
-app.get("/api/products/:id", (request, response) => {
+app.use("/api/products", router);
+
+// This is an example of a get request using query params
+app.get("/api/products", (request, response) => {
 	const {
-		params: { id },
+		query: { category, in_stock },
 	} = request;
 
-	console.log(id);
-
-	const parsedId = parseInt(id);
-
-	if (isNaN(parsedId))
-		return response.send(
-			"The ID your provided is invalid, please provide a valid ID."
-		);
-
-	const newProduct = products.products.find(
-		(product) => product.id === parsedId
-	);
-
-	if (!newProduct) return response.send("Product not found.");
-
-	return response.json(newProduct);
+	console.log(category, in_stock);
+	response.sendStatus(201);
 });
 
 // This is an example of a post request
