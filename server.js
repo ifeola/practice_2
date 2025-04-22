@@ -1,26 +1,19 @@
 import express, { request } from "express";
 import router from "./routes/router.js";
+import products from "./data/products.js";
 
 const app = express();
 const PORT = process.env.PORT || 8383;
 
 app.use(express.json());
 
+// This is an example of a get request using query params
 // This is an example of a get request
-// app.use("/api", router);
+app.use("/api", router);
 
 // Getting a product by id
 app.use("/api/products", router);
 
-// This is an example of a get request using query params
-app.get("/api/products", (request, response) => {
-	const {
-		query: { category, in_stock },
-	} = request;
-
-	console.log(category, in_stock);
-	response.sendStatus(201);
-});
 
 // This is an example of a post request
 app.post("/api/products", (request, response) => {
